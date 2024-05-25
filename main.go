@@ -13,7 +13,13 @@ func main() {
 	reader := bufio.NewReader(os.Stdin) // setting the standard input device
 
 	for {
-		fmt.Print("go-shell> ")
+		dir, err := os.Getwd()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			continue
+		}
+
+		fmt.Printf("%s go-shell> ", dir)
 		// read the input
 		input, err := reader.ReadString('\n') // after every newline
 
