@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strings"
 )
 
@@ -21,13 +22,28 @@ func NewShell() *Shell {
 
 func (s *Shell) Run() error {
 	for {
+		// getting the current directory path
 		dir, err := os.Getwd()
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 			continue
 		}
 
-		fmt.Printf("\033[34m%s\033[0m go-shell> ", dir)
+		// getting the hostname
+		hostname, err := os.Hostname()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			continue
+		}
+
+		// getting the current user
+		currentUser, err := user.Current()
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			continue
+		}
+
+		fmt.Printf("\033[31m%s\033[0m@\033[32m%s\033[0m:\033[34m%s\033[0m go-shell> ", currentUser.Username, hostname, dir)
 		// read the input
 		input, err := s.reader.ReadString('\n') // after every newline
 
