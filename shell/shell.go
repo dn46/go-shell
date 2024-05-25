@@ -2,7 +2,6 @@ package shell
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -66,13 +65,19 @@ func execInput(input string) error {
 
 	switch args[0] {
 	case "cd":
-		// gotta make cd to home dir with empty path
+		var dir string
 		if len(args) < 2 {
-			return errors.New("path required")
+			usr, err := user.Current()
+			if err != nil {
+				return err
+			}
+			dir = usr.HomeDir
+		} else {
+			dir = args[1]
 		}
 
 		// change directory and return the error
-		return os.Chdir(args[1])
+		return os.Chdir(dir)
 	case "exit":
 		os.Exit(0)
 	}
