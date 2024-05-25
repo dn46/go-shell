@@ -19,7 +19,7 @@ func main() {
 			continue
 		}
 
-		fmt.Printf("%s go-shell> ", dir)
+		fmt.Printf("\033[34m%s\033[0m go-shell> ", dir)
 		// read the input
 		input, err := reader.ReadString('\n') // after every newline
 
